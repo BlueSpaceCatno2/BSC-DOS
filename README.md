@@ -2,6 +2,8 @@ first release of BSC-DOS, Ive been working on this for the entire time ive been 
 
 vist https://github.com/WesternGamer 's page, he helped with a decent ammount of code.
 
+To install the latest version, go to this link: https://github.com/BlueSpaceCatno2/BSC-DOS
+
 Instructions: on start you can type - help for a list of commands.
 
 Command list:
