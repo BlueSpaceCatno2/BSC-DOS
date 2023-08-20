@@ -20,6 +20,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using System;
+using System.CodeDom.Compiler;
+using System.IO;
+using Microsoft.CSharp;
 
 public class Program
 {
@@ -27,9 +32,15 @@ public class Program
 
 
 
-    public static void Main(string[] args)
-    {
-        string Warnings = null;
+
+
+
+        static void Main(string[] args)
+        {
+        
+    
+
+string Warnings = null;
         try
         {
             Console.SetWindowSize(120, 30);
@@ -907,29 +918,32 @@ public class Program
 
             if (Command.ToUpper() == "RUN" || Command.ToUpper() == "-RUN")
             {
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Enter file name");
+                Color();
+                String NAME = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine(@"Enter drive path EX = C:\");
+                Color();
+                string DRIVE = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Enter File extension (dont add dot)");
+                Color();
+                string TYPE = Console.ReadLine();
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.WriteLine("Enter folder (Type string of folders if needed)");
+                Color();
+                string Folder = Console.ReadLine();
 
-                string? openfile = "";
-                Console.WriteLine("Enter file Path");
-                openfile = Console.ReadLine();
-
-                Process process = new();
-
-
-                using Process pProcess = new();
-                process.StartInfo.FileName = openfile;
-                process.StartInfo.Arguments = "";
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardInput = true;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.RedirectStandardError = true;
-                //* Set your output and error (asynchronous) handlers
-                process.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
-                process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
-                //* Start process and handlers
-                process.Start();
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-                process.WaitForExit();
+                try
+                {
+                    string Path = DRIVE + @"\" + Folder + @"\" + NAME + "." + TYPE;
+                    Process.Start(Path);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
                 continue;
 
 
@@ -966,13 +980,23 @@ public class Program
 
             if (Command.ToUpper() == "SEARCH" || Command.ToUpper() == "-SEARCH")
             {
-                string request = "start https://www.bing.com";
-                ProcessStartInfo ps = new ProcessStartInfo
+                try
                 {
-                    FileName = request,
-                    UseShellExecute = true
-                };
-                Process.Start(ps);
+                    string request = "start https://www.bing.com";
+                    ProcessStartInfo ps = new ProcessStartInfo
+                    {
+                        FileName = request,
+                        UseShellExecute = true
+                    };
+                    Process.Start(ps);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e);
+                }
+
+                Worked = true;
+                continue;
             }
 
 
@@ -1072,7 +1096,7 @@ public class Program
                 Console.WriteLine("BSC-DOS Major Update History:");
                 Thread.Sleep(200);
                 DoStuff();
-                Console.WriteLine("V 0.0.0.1 - added subtraction and addition functions");
+                Console.WriteLine("V 0.0.0.1 - Added subtraction and addition functions");
                 Thread.Sleep(200);
                 DoStuff();
                 Console.WriteLine("V 0.0.0.5 - Added multiplication and division, title");
@@ -1118,6 +1142,12 @@ public class Program
                 Thread.Sleep(200);
                 DoStuff();
                 Console.WriteLine("V 0.1.1.3 - Resized window for efficency, view file_mode commands in reguilar -help menu");
+                Thread.Sleep(200);
+                DoStuff();
+                Console.WriteLine("V 0.1.1.7 - Added sqare root math, bugfixes, fixed run command");
+                Thread.Sleep(200);
+                DoStuff();
+                Console.WriteLine("V 0.1.1.9 - Bugfixes, repairs, antilag");
 
 
                 Worked = true;
@@ -1353,21 +1383,6 @@ public class Program
                 continue;
             }
 
-            if (Command.ToUpper() == "FILE_MODE" || Command.ToUpper() == "-FILE_MODE")
-            {
-                //invalid command
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("Error operating " + Command);
-                Console.WriteLine("command is not accessable ");
-                Console.WriteLine(" Error #005 improper usage");
-                Console.Beep(3000, 1000);
-                Color();
-
-                Worked = true;
-                continue;
-            }
-
 
 
 
@@ -1446,7 +1461,7 @@ public class Program
     [DllImport("kernel32.dll", SetLastError = true)]
     static extern int RegisterApplicationRestart([MarshalAs(UnmanagedType.LPWStr)] string commandLineArgs, int Flags);
 
-    [Flags]
+   [Flags]
     enum ExitWindows : uint
     {
         //1 of
